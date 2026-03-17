@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="NUST Zimbabwe Campus Navigation Guide - Find directions and distances between buildings">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>NUST Campus Guide | Navigation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <img src="nust-logo.png" alt="NUST Zimbabwe Logo" class="header-logo">
+            <h1>NUST Campus Guide Chatbot</h1>
+            <p class="status">Your Guide to NUST Zimbabwe Campus</p>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                <p>Welcome to NUST Zimbabwe Campus Guide! What's your name?</p>
+            </div>
+        </div>
+        
+        <div class="chat-input-container">
+            <input 
+                type="text" 
+                id="userInput" 
+                class="chat-input" 
+                placeholder="Ask for directions to any NUST building..."
+                autocomplete="off"
+            >
+            <button id="sendBtn" class="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
