@@ -476,16 +476,26 @@ function provideDirections() {
     } else if (userPosition === userDestination) {
         directionText = `You're already at ${userDestination}! Is there somewhere else you'd like to go?`;
     } else {
-        directionText = `From ${userPosition}, follow the main pathways towards ${userDestination}. Look for signage along the way.`;
+        directionText = `Navigate from ${userPosition} to ${userDestination}.`;
     }
 
     // Calculate distance using Dijkstra's algorithm
     if (userWantsDistance === 'yes' && userPosition !== userDestination) {
         const result = pathfinder.findShortestPath(userPosition, userDestination);
-        const distanceMeters = result.distance === Infinity ? 'N/A' : result.distance;
-        const distanceKm = result.distance === Infinity ? 'N/A' : (result.distance / 1000).toFixed(2);
         
-        distanceInfo = `\n\n📍 Distance: ${distanceMeters} meters (${distanceKm} km)\n📍 Route: ${result.path.join(' → ')}`;
+        if (result.distance !== Infinity && result.distance > 0) {
+            const distanceMeters = result.distance;
+            const distanceKm = (result.distance / 1000).toFixed(2);
+            const routePath = result.path.join(' → ');
+            
+            // Format distance info nicely
+            distanceInfo = `
+
+📏 SHORTEST DISTANCE: ${distanceMeters} meters (${distanceKm} km)
+🛣️  OPTIMAL ROUTE: ${routePath}`;
+        } else {
+            distanceInfo = `\n\n📍 Distance calculation in progress...`;
+        }
     } else if (userWantsDistance === 'yes' && userPosition === userDestination) {
         distanceInfo = '\n\n📍 You are already at this location!';
     }
@@ -561,5 +571,5 @@ userInput.addEventListener('keypress', (e) => {
 
 // Initialize the conversation
 setTimeout(() => {
-    addMessage('Welcome to NUST Zimbabwe Campus Guide! What\'s your name?', false);
+    addMessage('Hi there! What\'s your name?', false);
 }, 500);
