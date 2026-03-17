@@ -395,7 +395,7 @@ function addMessage(text, isUser = false, isOptions = false) {
         messageDiv.innerHTML = text;
     } else {
         const messageParagraph = document.createElement('p');
-        messageParagraph.textContent = text;
+        messageParagraph.innerHTML = isUser ? `<strong>${userName || 'You'}:</strong> ${text}` : `<strong>NUST Navigator:</strong> ${text}`;
         messageDiv.appendChild(messageParagraph);
     }
 
@@ -502,15 +502,40 @@ function provideDirections() {
 
     addMessage(directionText + distanceInfo, false);
 
-    // Reset conversation for next user
+    // Ask if user wants another route
     setTimeout(() => {
-        addMessage(`Need directions to another location, ${userName}? Just let me know where you are now!`, false);
-        conversationState = 'position';
-        userPosition = '';
-        userDestination = '';
-        userWantsDistance = '';
-    }, 3000);
+        addMessage('Would you like directions to another location?', false);
+        showContinueOptions();
+        conversationState = 'continue';
+    }, 1000);
 }
+
+// Show continue yes/no options
+function showContinueOptions() {
+    let optionsHtml = `<p>Choose an option:</p><div class="location-options">`;
+    optionsHtml += `<button class="location-btn" onclick="handleContinue('yes')">Yes</button>`;
+    optionsHtml += `<button class="location-btn" onclick="handleContinue('no')">No</button>`;
+    optionsHtml += '</div>';
+    addMessage(optionsHtml, false, true);
+}
+
+function handleContinue(choice) {
+    const lastMessage = chatMessages.lastElementChild;
+    if (lastMessage && lastMessage.innerHTML.includes('location-options')) {
+        lastMessage.remove();
+    }
+
+    addMessage(choice === 'yes' ? 'Yes, please.' : 'No, thank you.', true);
+
+    if (choice === 'yes') {
+        conversationState = 'position';
+        showLocationOptions(`Great! Where are you currently located, ${userName}?`, 'position');
+    } else {
+        addMessage(`Okay, ${userName}! If you need directions later, just ask.`, false);
+        conversationState = 'ended';
+    }
+}
+
 
 // Function to handle user input based on conversation state
 function handleUserInput(message) {
@@ -529,21 +554,52 @@ function handleUserInput(message) {
             break;
 
         case 'position':
+            // Allow typed location or button selection
+            const normalizedPosition = message.trim();
+            const matchedPosition = campusLocations.find(loc => loc.toLowerCase() === normalizedPosition.toLowerCase());
+
+            if (matchedPosition) {
+                selectLocation(matchedPosition, 'position');
+            } else {
+                addMessage('Please select your current location from the buttons or type the location exactly as shown.', false);
+            }
+            break;
+
         case 'destination':
-            addMessage('Please use the buttons above to select your location.', false);
+            const normalizedDestination = message.trim();
+            const matchedDestination = campusLocations.find(loc => loc.toLowerCase() === normalizedDestination.toLowerCase());
+
+            if (matchedDestination) {
+                selectLocation(matchedDestination, 'destination');
+            } else {
+                addMessage('Please select your destination from the buttons or type the location exactly as shown.', false);
+            }
             break;
 
         case 'distance':
-            addMessage('Please use the buttons above to answer the distance question.', false);
+            const answer = message.trim().toLowerCase();
+            if (answer === 'yes' || answer === 'y') {
+                selectDistance('yes');
+            } else if (answer === 'no' || answer === 'n') {
+                selectDistance('no');
+            } else {
+                addMessage('Please answer with Yes or No (or click a button).', false);
+            }
             break;
 
-        case 'directions':
-            // If user types something after getting directions, assume they want new directions
-            conversationState = 'position';
-            userPosition = '';
-            userDestination = '';
-            userWantsDistance = '';
-            showLocationOptions(`Where are you currently located now, ${userName}?`, 'position');
+        case 'continue':
+            const again = message.trim().toLowerCase();
+            if (again === 'yes' || again === 'y') {
+                handleContinue('yes');
+            } else if (again === 'no' || again === 'n') {
+                handleContinue('no');
+            } else {
+                addMessage('Please answer with Yes or No (or click a button).', false);
+            }
+            break;
+
+        case 'ended':
+            addMessage('Thanks! You can refresh the page to start again anytime.', false);
             break;
     }
 }
@@ -569,7 +625,3 @@ userInput.addEventListener('keypress', (e) => {
     }
 });
 
-// Initialize the conversation
-setTimeout(() => {
-    addMessage('Hi there! What\'s your name?', false);
-}, 500);
