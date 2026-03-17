@@ -58,11 +58,12 @@ body {
     display: inline-block;
 }
 
-.chatbot-header h1 {
+.chatbot-header h1.header-title {
     font-size: 26px;
     font-weight: 700;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
+    color: white;
 }
 
 .status {
@@ -70,6 +71,7 @@ body {
     opacity: 0.95;
     letter-spacing: 0.3px;
     font-weight: 500;
+    color: black;
 }
 
 /* Chat Messages Area */

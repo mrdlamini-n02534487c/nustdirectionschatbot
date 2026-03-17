@@ -29,14 +29,23 @@ const campusLocations = [
     'Parking Area'
 ];
 
-// Campus Graph - distances in meters between locations
+// Campus Graph - distances in meters between locations (fully connected)
 const campusGraph = {
     'Main Gate': {
         'Administration Block': 50,
         'Parking Area': 30,
         'Library': 180,
+        'Lecture Theatre 1': 200,
         'Student Centre': 200,
-        'Medical Centre': 210
+        'Medical Centre': 210,
+        'Engineering Faculty': 350,
+        'Science Faculty': 280,
+        'Commerce Faculty': 220,
+        'Cafeteria': 250,
+        'Sports Complex': 400,
+        'Hostels': 320,
+        'Lecture Theatre 2': 230,
+        'Lecture Theatre 3': 260
     },
     'Administration Block': {
         'Main Gate': 50,
@@ -44,7 +53,15 @@ const campusGraph = {
         'Lecture Theatre 1': 160,
         'Engineering Faculty': 250,
         'Student Centre': 180,
-        'Parking Area': 70
+        'Parking Area': 70,
+        'Medical Centre': 200,
+        'Science Faculty': 220,
+        'Commerce Faculty': 170,
+        'Cafeteria': 200,
+        'Sports Complex': 380,
+        'Hostels': 300,
+        'Lecture Theatre 2': 190,
+        'Lecture Theatre 3': 210
     },
     'Library': {
         'Administration Block': 150,
@@ -52,26 +69,63 @@ const campusGraph = {
         'Lecture Theatre 1': 50,
         'Science Faculty': 120,
         'Student Centre': 150,
-        'Engineering Faculty': 200
+        'Engineering Faculty': 200,
+        'Medical Centre': 180,
+        'Parking Area': 180,
+        'Cafeteria': 150,
+        'Commerce Faculty': 200,
+        'Sports Complex': 320,
+        'Hostels': 280,
+        'Lecture Theatre 2': 80,
+        'Lecture Theatre 3': 100
     },
     'Lecture Theatre 1': {
         'Library': 50,
         'Lecture Theatre 2': 40,
         'Lecture Theatre 3': 80,
         'Science Faculty': 100,
-        'Student Centre': 130
+        'Student Centre': 130,
+        'Engineering Faculty': 150,
+        'Administration Block': 160,
+        'Medical Centre': 160,
+        'Cafeteria': 120,
+        'Commerce Faculty': 140,
+        'Main Gate': 200,
+        'Parking Area': 200,
+        'Sports Complex': 300,
+        'Hostels': 260
     },
     'Lecture Theatre 2': {
         'Lecture Theatre 1': 40,
         'Lecture Theatre 3': 50,
         'Science Faculty': 80,
-        'Engineering Faculty': 150
+        'Engineering Faculty': 150,
+        'Library': 80,
+        'Student Centre': 120,
+        'Medical Centre': 140,
+        'Cafeteria': 100,
+        'Commerce Faculty': 130,
+        'Administration Block': 190,
+        'Main Gate': 230,
+        'Parking Area': 220,
+        'Sports Complex': 280,
+        'Hostels': 240
     },
     'Lecture Theatre 3': {
         'Lecture Theatre 1': 80,
         'Lecture Theatre 2': 50,
         'Science Faculty': 60,
-        'Engineering Faculty': 120
+        'Engineering Faculty': 120,
+        'Library': 100,
+        'Student Centre': 110,
+        'Medical Centre': 120,
+        'Cafeteria': 90,
+        'Commerce Faculty': 100,
+        'Administration Block': 210,
+        'Main Gate': 260,
+        'Parking Area': 250,
+        'Sports Complex': 260,
+        'Hostels': 220
     },
     'Engineering Faculty': {
         'Administration Block': 250,
@@ -80,7 +134,14 @@ const campusGraph = {
         'Lecture Theatre 3': 120,
         'Science Faculty': 180,
         'Sports Complex': 300,
-        'Parking Area': 280
+        'Parking Area': 280,
+        'Student Centre': 280,
+        'Lecture Theatre 1': 150,
+        'Medical Centre': 300,
+        'Main Gate': 350,
+        'Cafeteria': 280,
+        'Commerce Faculty': 260,
+        'Hostels': 200
     },
     'Science Faculty': {
         'Library': 120,
@@ -89,13 +150,30 @@ const campusGraph = {
         'Lecture Theatre 3': 60,
         'Engineering Faculty': 180,
         'Sports Complex': 200,
-        'Student Centre': 220
+        'Student Centre': 220,
+        'Administration Block': 220,
+        'Medical Centre': 160,
+        'Cafeteria': 200,
+        'Commerce Faculty': 240,
+        'Main Gate': 280,
+        'Parking Area': 260,
+        'Hostels': 280
     },
     'Commerce Faculty': {
         'Administration Block': 200,
         'Student Centre': 150,
         'Library': 250,
-        'Parking Area': 180
+        'Parking Area': 180,
+        'Lecture Theatre 1': 140,
+        'Lecture Theatre 2': 130,
+        'Lecture Theatre 3': 100,
+        'Cafeteria': 120,
+        'Medical Centre': 180,
+        'Engineering Faculty': 260,
+        'Science Faculty': 240,
+        'Main Gate': 220,
+        'Sports Complex': 300,
+        'Hostels': 240
     },
     'Student Centre': {
         'Administration Block': 180,
@@ -104,41 +182,94 @@ const campusGraph = {
         'Lecture Theatre 1': 130,
         'Medical Centre': 100,
         'Cafeteria': 30,
-        'Commerce Faculty': 150
+        'Commerce Faculty': 150,
+        'Parking Area': 200,
+        'Lecture Theatre 2': 120,
+        'Lecture Theatre 3': 110,
+        'Engineering Faculty': 280,
+        'Science Faculty': 220,
+        'Sports Complex': 250,
+        'Hostels': 260
     },
     'Sports Complex': {
         'Engineering Faculty': 300,
         'Science Faculty': 200,
         'Hostels': 250,
         'Parking Area': 350,
-        'Main Gate': 450
+        'Main Gate': 400,
+        'Student Centre': 250,
+        'Library': 320,
+        'Administration Block': 380,
+        'Medical Centre': 300,
+        'Cafeteria': 280,
+        'Commerce Faculty': 300,
+        'Lecture Theatre 1': 300,
+        'Lecture Theatre 2': 280,
+        'Lecture Theatre 3': 260
     },
     'Hostels': {
         'Sports Complex': 250,
-        'Main Gate': 300,
-        'Administration Block': 350,
-        'Medical Centre': 380,
-        'Parking Area': 280
+        'Main Gate': 320,
+        'Administration Block': 300,
+        'Medical Centre': 200,
+        'Parking Area': 280,
+        'Engineering Faculty': 200,
+        'Library': 280,
+        'Lecture Theatre 2': 240,
+        'Lecture Theatre 1': 260,
+        'Lecture Theatre 3': 220,
+        'Science Faculty': 280,
+        'Student Centre': 260,
+        'Cafeteria': 250,
+        'Commerce Faculty': 240
     },
     'Medical Centre': {
         'Student Centre': 100,
         'Cafeteria': 80,
         'Administration Block': 210,
         'Main Gate': 210,
-        'Hostels': 380
+        'Hostels': 200,
+        'Science Faculty': 160,
+        'Library': 180,
+        'Lecture Theatre 1': 160,
+        'Lecture Theatre 2': 140,
+        'Lecture Theatre 3': 120,
+        'Engineering Faculty': 300,
+        'Parking Area': 240,
+        'Commerce Faculty': 180,
+        'Sports Complex': 300
     },
     'Cafeteria': {
         'Student Centre': 30,
         'Medical Centre': 80,
         'Administration Block': 200,
-        'Library': 160
+        'Library': 150,
+        'Lecture Theatre 1': 120,
+        'Lecture Theatre 2': 100,
+        'Lecture Theatre 3': 90,
+        'Commerce Faculty': 120,
+        'Main Gate': 250,
+        'Parking Area': 220,
+        'Engineering Faculty': 280,
+        'Science Faculty': 200,
+        'Sports Complex': 280,
+        'Hostels': 250
     },
     'Parking Area': {
         'Main Gate': 30,
         'Administration Block': 70,
         'Hostels': 280,
         'Engineering Faculty': 280,
-        'Sports Complex': 350
+        'Sports Complex': 350,
+        'Library': 180,
+        'Lecture Theatre 1': 200,
+        'Lecture Theatre 2': 220,
+        'Lecture Theatre 3': 250,
+        'Science Faculty': 260,
+        'Student Centre': 200,
+        'Medical Centre': 240,
+        'Cafeteria': 220,
+        'Commerce Faculty': 180
     }
 };
 
